@@ -54,7 +54,7 @@ def get_group(action, db):
     sql = """
         SELECT id from groups
         WHERE name = %(name)s
-        AND group_user = %(user_id)s
+        AND group_user = %(group_user)s
     """
     db.execute(sql, action)
     group_id = db.fetchall()[0]
@@ -123,3 +123,10 @@ def get_all_groups(action, db):
         print e
         return e, False
 
+
+
+# def add_message_to_db(action, db):
+#     sql  = """
+#         INSERT INTO bubbles (text, author, group_id, date)
+#         VALUES (%(group_id)s, %(user_id)s)
+#     """
