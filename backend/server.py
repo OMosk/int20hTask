@@ -24,18 +24,24 @@ class WebSocket(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         db = self.application.db
-        message_dict = json.loads(message)
-        if message_dict["type"] == "register":
-            response = api.register(message_dict)
-            
-        else:
-            response = "sorry"
-        self.write_message(response)
 
-        # db.chat.insert(message_dict)
-        # for key, value in enumerate(self.application.webSocketsPool):
-        #     if value != self:
-        #         value.ws_connection.write_message(message)
+        message_dict = json.loads(message)
+        if 'actions' not in message_dict.keys():
+            self.write_message("no actions in message")
+            return
+        response_actions = []
+        for action in message_dict["actions"]:
+            response_action = {'actionId': action['actionId'],
+                               'type': action['type'],
+                               }
+            if action["type"] == "registration":
+                response_action['tocken'] = api.register(action, db)
+            else:
+                response_action['message'] = "sorry"
+            response_actions.append(response_action)
+        response = {'actions': response_actions}
+        response = json.dumps(response)
+        self.write_message(response)
 
 
     def on_close(self, message=None):
