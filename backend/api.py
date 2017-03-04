@@ -54,7 +54,7 @@ def get_group(action, db):
     sql = """
         SELECT id from groups
         WHERE name = %(name)s
-        AND group_user = %(group_user)s
+        AND group_user = %(user_id)s
     """
     db.execute(sql, action)
     group_id = db.fetchall()[0]
