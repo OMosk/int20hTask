@@ -16,7 +16,7 @@ CREATE TABLE bubbles(
     id INTEGER PRIMARY KEY DEFAULT NEXTVAL('user_ids'),
     text VARCHAR(500),
     authour VARCHAR(120) references users(provider_id),
-    group_id INTEGER references grops(id),
+    group_id INTEGER references groups(id),
     date DATE
 
 );
