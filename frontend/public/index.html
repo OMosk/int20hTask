@@ -16,6 +16,55 @@
     <title>React App</title>
   </head>
   <body>
+    <script>
+      console.log('starting to load fb api');
+      window.fbAsyncInit = function() {
+        console.log('fbLoaded');
+        FB.init({
+          appId      : '1875797875969505',
+          xfbml      : true,
+          version    : 'v2.8'
+        });
+        console.log('inited');
+        FB.getLoginStatus(function(response) {
+          console.log('getLoginStatus() == ', response);
+          if (response.status != 'connected') {
+            FB.login(function(response) {
+              if (response.authResponse) {
+                  FB.api(
+                      "/me/picture?redirect=false",
+                      function (response) {
+                          if (response && !response.error) {
+                              /* handle the result */
+                              console.log(response);
+                          }
+                      }
+                  );
+              }
+            });
+          } else {
+                  FB.api(
+                      "/me/picture?type=square&width=200&height=200&redirect=false",
+                      function (response) {
+                          if (response && !response.error) {
+                              /* handle the result */
+                              console.log(response);
+                          }
+                      }
+                  );
+
+          }
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.

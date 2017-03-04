@@ -25,7 +25,23 @@
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
       crossorigin="anonymous"></script>
     <script src="js/map.js"></script>
+    <script src="js/eventemitter.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/client.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtOYoNPactaAxedhdnoux4W_Xd7QzQvHQ&callback=initMap"
         async defer></script>
+
+    <script>
+      console.log('starting to load fb api');
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+
   </body>
 </html>
