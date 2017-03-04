@@ -39,11 +39,14 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             if action["type"] == "registration":
                 response = router.register(action, db)
 
-            if action["type"] == "auth":
+            elif action["type"] == "auth":
                 response = router.auth(action, db)
-                
+            elif action["type"] == "create_group":
+                response = router.create_group(action, db)
+            elif action["type"] == "get_all_users":
+                response = router.get_all_users(db)
             else:
-                response_action['message'] = "sorry"
+                response_action['message'] = "sorry, no such action"
             response_action.update(response)
             response_actions.append(response_action)
         response = {'actions': response_actions}

@@ -29,3 +29,29 @@ def auth(action, db):
     db.execute(sql, [action['token']])
     user = db.fetchone()
     return user, True if user else False
+
+def create_group(action, db):
+    user = get_user_by_id(action["user_id"], db)
+    if not user:
+        print "NO SUCH USER"
+    try:
+        sql = '''INSERT INTO groups
+                (name, group_user)
+                VALUES(%(name)s, %(group_user)s)
+            '''
+        values = {"name": action["name"],
+                  "group_user": action["user_id"]}
+        db.execute(sql, values)
+        return True
+    except Exception as e:
+        print e
+        return False
+
+
+def get_all_users(db):
+    try:
+        db.execute("Select * from users")
+        return db.fetchall(), True
+    except Exception as e:
+        print e
+        return "couldn't get users", False
