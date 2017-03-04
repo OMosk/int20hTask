@@ -24,7 +24,7 @@
   }
 
   function Client() {
-    this.wsConnectionString = 'ws://192.168.32.185/api';
+    this.wsConnectionString = 'wss://' + window.host + '/api';
     this.actionId = 0;
     this.isConnected = false;
     this.isAuthorized = false;
@@ -135,6 +135,15 @@
   Client.prototype.createGroup = function(name, cb) {
 
   }
+
+  Client.prototype.addToGroup = function(group, user, cb) {
+
+  }
+
+  Client.prototype.removeFromGroup = function(group, user, cb) {
+
+  }
+
 
 
 window.client = new Client();
