@@ -28,6 +28,7 @@ def create_group(action, db):
     e, success = api.create_group(action, db)
     if success:
         response_action["success"] = True
+        response_action["group_id"] = e
     else:
         response_action["error"] = str(e)
     return response_action

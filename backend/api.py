@@ -44,7 +44,7 @@ def create_group(action, db):
         group = get_group(action, db)
         values['group_id'] = group
         add_user_to_group(values, db)
-        return None, True
+        return values['group_id'], True
     except Exception as e:
         print e
         return e, False
@@ -72,7 +72,7 @@ def add_user_to_group(action, db):
             sql = """INSERT INTO group_users (group_id, user_id)
                 VALUES (%(group_id)s, %(user_id)s)"""
             db.execute(sql, action)
-            return None, True
+            return values, True
         except Exception as e:
             print e
             return e, False
