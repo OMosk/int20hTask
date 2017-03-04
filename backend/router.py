@@ -72,6 +72,10 @@ def get_all_groups(action, db):
         response_action['error'] = str(groups)
     return response_action
 
-# def sent_message(socket, action, db):
-#     response_action = {}
-#     message, success = api.add_message_to_db(action, db)
+
+def sent_message(socket, action, db):
+    api.add_message_to_db(action, db)
+    for sock in socket.application.webSocketsPool:
+        if api.user_in_group(sock.id, action['group_id'], db):
+            sock.write_message(action)
+

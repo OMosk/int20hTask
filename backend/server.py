@@ -56,10 +56,9 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 conn.commit()
             elif action["type"] == "get_all_groups":
                 response = router.get_all_groups(action, db)
-            # elif action['type'] == 'sent_message':
-            #     response = router.sent_message(action, db)
-            #     if not 'error' on response.keys():
-            #         for i in self.application.webSocketsPool
+            elif action['type'] == 'sent_message':
+                response = router.sent_message(self, action, db)
+                continue
             else:
                 response['error'] = "sorry, no such action"
             response_action.update(response)

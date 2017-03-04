@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 
 def register(action, db):
@@ -124,9 +125,23 @@ def get_all_groups(action, db):
         return e, False
 
 
+def add_message_to_db(action, db):
+    sql = """
+        INSERT INTO bubbles (text, authour, group_id, date)
+        VALUES (%(text)s, %(user_id)s, %(group_id)s, %(date)s)
+    """
+    action['date'] = datetime.datetime.now()
+    db.execute(sql, action)
+    action['date'] = str(action['date'])
 
-# def add_message_to_db(action, db):
-#     sql  = """
-#         INSERT INTO bubbles (text, author, group_id, date)
-#         VALUES (%(group_id)s, %(user_id)s)
-#     """
+
+def user_in_group(user_id, group_id, db):
+    sql = """
+        SELECT * FROM group_users
+        WHERE user_id = %(user_id)s
+        AND group_id = %(group_id)s
+    """
+    values = {"user_id": user_id, "group_id": group_id}
+    db.execute(sql, values)
+    users = db.fetchall()
+    return True if users else False
