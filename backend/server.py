@@ -5,7 +5,7 @@ import tornado.ioloop
 import tornado.websocket
 import psycopg2
 
-import api.py
+import api
 
 
 class MainHandler(tornado.web.RequestHandler):
