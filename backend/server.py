@@ -4,8 +4,9 @@ import tornado.web
 import tornado.ioloop
 import tornado.websocket
 import psycopg2
+import psycopg2.extras
 
-import api
+import router
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -31,17 +32,19 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             return
         response_actions = []
         for action in message_dict["actions"]:
+
             response_action = {'actionId': action['actionId'],
                                'type': action['type'],
                                }
             if action["type"] == "registration":
-                value, success = api.register(action, db)
-                if success:
-                    response_action['tocken'] = value
-                else:
-                    response_action['error'] = value
+                response = router.register(action, db)
+
+            if action["type"] == "auth":
+                response = router.auth(action, db)
+                
             else:
                 response_action['message'] = "sorry"
+            response_action.update(response)
             response_actions.append(response_action)
         response = {'actions': response_actions}
         response = json.dumps(response)
@@ -49,6 +52,8 @@ class WebSocket(tornado.websocket.WebSocketHandler):
 
 
     def on_close(self, message=None):
+        conn = self.application.conn
+        conn.commit()
         for key, value in enumerate(self.application.webSocketsPool):
             if value == self:
                 del self.application.webSocketsPool[key]
@@ -60,8 +65,8 @@ class Application(tornado.web.Application):
         settings = {
             'static_url_prefix': '/static/',
         }
-        conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
-        self.db = conn.cursor()
+        self.conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
+        self.db = self.conn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         handlers = (
             (r'/', MainHandler),
             (r'/api?', WebSocket),

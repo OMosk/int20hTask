@@ -22,3 +22,10 @@ def get_user_by_id(id, db):
     sql = 'SELECT * FROM users WHERE provider_id = %s'
     db.execute(sql, [str(id), ])
     return db.fetchall()
+
+
+def auth(action, db):
+    sql = 'SELECT * FROM users WHERE auth_tocken = %s'
+    db.execute(sql, [action['token']])
+    user = db.fetchone()
+    return user, True if user else False
