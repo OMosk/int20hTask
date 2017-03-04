@@ -5,22 +5,115 @@
     <title>ChatMap</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous">
-    <link rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-      crossorigin="anonymous">
   </head>
   <body>
-    <div id="map"></div>
 
+  <div id="map"></div>
+    <div class="content">
+      <form class="form-inline pull-right">
+        <div class="form-group">
+          <label for="email">Enter message:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <button type="submit" class="btn btn-default">Send</button>
+      </form>
+    </div>
+
+    <div class="authorization" >
+      <button class="btn btn-facebook"><i class="fa fa-facebook"></i> </button>
+    </div>
+
+    <div id="wrapper">
+      <div class="overlay"></div>
+      <!-- Sidebar -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+          <ul class="nav sidebar-nav">
+              <li class="sidebar-brand">
+                  <a href="#">   Menu </a>
+              </li>
+              <li>
+                <a href="#"  data-toggle="modal" data-target="#addGroup">Add Group</a>
+              </li>
+             <li>
+                  <a href="#"> Family</a>
+              </li>
+
+              <li>
+                  <a href="#">Friends</a>
+              </li>
+
+              <li>
+                  <a href="#">Team</a>
+              </li>
+
+              <!-- <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Works <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="dropdown-header">Dropdown heading</li>
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+              <li>
+                  <a href="#">Services</a>
+              </li>
+              <li>
+                  <a href="#">Contact</a>
+              </li>-->
+          </ul>
+      </nav>
+      <!-- /#sidebar-wrapper -->
+
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+            <span class="hamb-top"></span>
+            <span class="hamb-middle"></span>
+            <span class="hamb-bottom"></span>
+          </button>
+      </div>
+
+      <!-- Modal -->
+    <div id="addGroup" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"> Add new group</h4>
+          </div>
+          <form>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="group">Enter name of group:</label>
+                <input type="text" required="" class="form-control" id="add_group">
+              </div>
+             </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-default" >Create</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+      <!-- /#page-content-wrapper -->
+  </div>
+  <!-- /#wrapper -->
     <script   src="https://code.jquery.com/jquery-3.1.1.min.js"
-    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    crossorigin="anonymous"></script>
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
       integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
       crossorigin="anonymous"></script>
@@ -43,5 +136,6 @@
        }(document, 'script', 'facebook-jssdk'));
     </script>
 
+    <script src="js/sidebar.js" ></script>
   </body>
 </html>

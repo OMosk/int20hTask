@@ -4,8 +4,9 @@ import tornado.web
 import tornado.ioloop
 import tornado.websocket
 import psycopg2
+import psycopg2.extras
 
-import api
+import router
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -24,21 +25,38 @@ class WebSocket(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         db = self.application.db
-        message_dict = json.loads(message)
-        if message_dict["type"] == "register":
-            response = api.register(message_dict)
-            
-        else:
-            response = "sorry"
-        self.write_message(response)
 
-        # db.chat.insert(message_dict)
-        # for key, value in enumerate(self.application.webSocketsPool):
-        #     if value != self:
-        #         value.ws_connection.write_message(message)
+        message_dict = json.loads(message)
+        if 'actions' not in message_dict.keys():
+            self.write_message("no actions in message")
+            return
+        response_actions = []
+        for action in message_dict["actions"]:
+
+            response_action = {'actionId': action['actionId'],
+                               'type': action['type'],
+                               }
+            if action["type"] == "registration":
+                response = router.register(action, db)
+
+            elif action["type"] == "auth":
+                response = router.auth(action, db)
+            elif action["type"] == "create_group":
+                response = router.create_group(action, db)
+            elif action["type"] == "get_all_users":
+                response = router.get_all_users(db)
+            else:
+                response_action['message'] = "sorry, no such action"
+            response_action.update(response)
+            response_actions.append(response_action)
+        response = {'actions': response_actions}
+        response = json.dumps(response)
+        self.write_message(response)
 
 
     def on_close(self, message=None):
+        conn = self.application.conn
+        conn.commit()
         for key, value in enumerate(self.application.webSocketsPool):
             if value == self:
                 del self.application.webSocketsPool[key]
@@ -50,8 +68,8 @@ class Application(tornado.web.Application):
         settings = {
             'static_url_prefix': '/static/',
         }
-        conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
-        self.db = conn.cursor()
+        self.conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
+        self.db = self.conn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         handlers = (
             (r'/', MainHandler),
             (r'/api?', WebSocket),
