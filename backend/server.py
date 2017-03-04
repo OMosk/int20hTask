@@ -16,6 +16,9 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class WebSocket(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
     def open(self):
         self.application.webSocketsPool.append(self)
 
@@ -51,7 +54,7 @@ class Application(tornado.web.Application):
         self.db = conn.cursor()
         handlers = (
             (r'/', MainHandler),
-            (r'/api/?', WebSocket),
+            (r'/api?', WebSocket),
         )
 
         tornado.web.Application.__init__(self, handlers)
