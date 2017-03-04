@@ -36,10 +36,10 @@ def create_group(action, db):
     try:
         sql = '''INSERT INTO groups
                 (name, group_user)
-                VALUES(%(name)s, %(group_user)s)
+                VALUES(%(name)s, %(user_id)s)
             '''
         values = {"name": action["name"],
-                  "group_user": action["user_id"]}
+                  "user_id": action["user_id"]}
         db.execute(sql, values)
         group = get_group(action, db)
         values['group_id'] = group

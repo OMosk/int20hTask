@@ -14,7 +14,6 @@ def register(action, db):
 def auth(action, db):
     response_action = {}
     user, success = api.auth(action, db)
-    print type(user)
     if success:
         response_action["name"] = user["name"]
         response_action["photo"] = user["photo"]
@@ -71,3 +70,7 @@ def get_all_groups(action, db):
     else:
         response_action['error'] = str(groups)
     return response_action
+
+# def sent_message(socket, action, db):
+#     response_action = {}
+#     message, success = api.add_message_to_db(action, db)
