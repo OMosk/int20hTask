@@ -42,8 +42,8 @@ def create_group(action, db):
                   "group_user": action["user_id"]}
         db.execute(sql, values)
         group = get_group(action, db)
-        action['group_id'] = group
-        add_user_to_group(action, db)
+        values['group_id'] = group
+        add_user_to_group(values, db)
         return None, True
     except Exception as e:
         print e

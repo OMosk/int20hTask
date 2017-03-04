@@ -40,8 +40,12 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             if action["type"] == "registration":
                 response = router.register(action, db)
                 conn.commit()
+                if 'error' not in response.keys():
+                    self.id = action["provider"] + action['providerUserId']
             elif action["type"] == "auth":
                 response = router.auth(action, db)
+                if 'error' not in response.keys():
+                    self.id = response['provider_id']
             elif action["type"] == "create_group":
                 response = router.create_group(action, db)
                 conn.commit()
@@ -52,6 +56,10 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 conn.commit()
             elif action["type"] == "get_all_groups":
                 response = router.get_all_groups(action, db)
+            # elif action['type'] == 'sent_message':
+            #     response = router.sent_message(action, db)
+            #     if not 'error' on response.keys():
+            #         for i in self.application.webSocketsPool
             else:
                 response['error'] = "sorry, no such action"
             response_action.update(response)
