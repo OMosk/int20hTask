@@ -1,11 +1,12 @@
 import uuid
 
+
 def register(action, db):
     try:
         action['providerId'] = action["provider"] + action['providerUserId']
         user = get_user_by_id(action['providerId'], db)
         if user:
-            return "such user already exists", False
+            return user[0]["auth_tocken"], True
         action['auth_tocken'] = str(uuid.uuid4())
         sql = '''INSERT INTO users
             (provider_id, name, photo, geo_location, auth_tocken)
@@ -15,7 +16,7 @@ def register(action, db):
         return action['auth_tocken'], True
     except Exception as e:
         print e
-        return "some problems while registration", False
+        return e, False
 
 
 def get_user_by_id(id, db):
@@ -30,10 +31,8 @@ def auth(action, db):
     user = db.fetchone()
     return user, True if user else False
 
+
 def create_group(action, db):
-    user = get_user_by_id(action["user_id"], db)
-    if not user:
-        print "NO SUCH USER"
     try:
         sql = '''INSERT INTO groups
                 (name, group_user)
@@ -42,16 +41,85 @@ def create_group(action, db):
         values = {"name": action["name"],
                   "group_user": action["user_id"]}
         db.execute(sql, values)
-        return True
+        group = get_group(action, db)
+        action['group_id'] = group
+        add_user_to_group(action, db)
+        return None, True
     except Exception as e:
         print e
-        return False
+        return e, False
+
+
+def get_group(action, db):
+    sql = """
+        SELECT id from groups
+        WHERE name = %(name)s
+        AND group_user = %(user_id)s
+    """
+    db.execute(sql, action)
+    group_id = db.fetchall()[0]
+    return group_id[0]
+
+
+def add_user_to_group(action, db):
+    sql = "SELECT * FROM group_users WHERE group_id = %(group_id)s AND user_id = %(user_id)s"
+    db.execute(sql, action)
+    exists = db.fetchall()
+    if exists:
+        return "user already exists", False
+    else:
+        try:
+            sql = """INSERT INTO group_users (group_id, user_id)
+                VALUES (%(group_id)s, %(user_id)s)"""
+            db.execute(sql, action)
+            return None, True
+        except Exception as e:
+            print e
+            return e, False
 
 
 def get_all_users(db):
     try:
         db.execute("Select * from users")
-        return db.fetchall(), True
+        users = db.fetchall()
+        return users, True
     except Exception as e:
         print e
-        return "couldn't get users", False
+        return e, False
+
+def get_all_groups(action, db):
+    try:
+        sql = """SELECT gr.name, gu.group_id
+            from groups gr LEFT OUTER JOIN group_users gu
+            ON gr.id = gu.group_id
+            WHERE gu.user_id = %(user_id)s
+            """
+        db.execute(sql, action)
+        raw_groups = db.fetchall()
+        groups = []
+        for raw_group in raw_groups:
+            group = {"name": raw_group['name'],
+                     "group_id": raw_group["group_id"]}
+            sql = """SELECT users.* from
+                users LEFT OUTER JOIN group_users gu
+                ON users.provider_id = gu.user_id
+                WHERE gu.group_id = %s
+            """
+            db.execute(sql, [group["group_id"]])
+            raw_users = db.fetchall()
+            users = []
+            for i in raw_users:
+                user = {
+                    "id": i['provider_id'],
+                    "name": i["name"],
+                    "photo": i["photo"],
+                    "geo_location": i["geo_location"]
+                }
+                users.append(user)
+            group["users"] = users
+            groups.append(group)
+        return groups, True
+    except Exception as e:
+        print e
+        return e, False
+

@@ -20,3 +20,8 @@ CREATE TABLE bubbles(
     date DATE
 
 );
+
+CREATE TABLE group_users(
+    user_id VARCHAR(120) references users(provider_id), 
+    group_id INTEGER references groups(id) 
+);
