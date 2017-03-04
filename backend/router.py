@@ -18,6 +18,7 @@ def auth(action, db):
     if success:
         response_action["name"] = user["name"]
         response_action["photo"] = user["photo"]
+        response_action['provider_id'] = user['provider_id']
     else:
         response_action["error"] = "no such user"
     return response_action
