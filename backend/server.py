@@ -48,10 +48,10 @@ class Application(tornado.web.Application):
             'static_url_prefix': '/static/',
         }
         conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
-        self.db = connection.chat
+        self.db = conn.cursor()
         handlers = (
             (r'/', MainHandler),
-            (r'/ api/?', WebSocket),
+            (r'/api/?', WebSocket),
         )
 
         tornado.web.Application.__init__(self, handlers)
