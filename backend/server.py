@@ -35,7 +35,11 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                                'type': action['type'],
                                }
             if action["type"] == "registration":
-                response_action['tocken'] = api.register(action, db)
+                value, success = api.register(action, db)
+                if success:
+                    response_action['tocken'] = value
+                else:
+                    response_action['error'] = value
             else:
                 response_action['message'] = "sorry"
             response_actions.append(response_action)
