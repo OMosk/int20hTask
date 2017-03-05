@@ -10,5 +10,6 @@ stateStore.notifier.on('change', function(){
   if (stateStore.data.isAuthorized){
     console.log("asfs");
     $('fieldset').removeAttr("disabled");
+    renderMarkers();
   }
 });
