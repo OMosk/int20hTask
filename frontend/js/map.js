@@ -39,14 +39,10 @@
       });
     }
 
-    var meet_location = new google.maps.Marker({
-      map: map,
-      title: 'Uluru (Ayers Rock)'
-    });
-
     setTimeout(function() {
       infowindow.open(map, marker);
     }, 3000);
+
 
     marker.addListener('click', function() {
       infowindow.open(map, marker);
@@ -56,15 +52,23 @@
       infowindow.close(map, marker);
     });
 
+
+    var meet_location = new google.maps.Marker({
+      map: map,
+      title: 'Uluru (Ayers Rock)'
+    });
+
     function placeMarker(location) {
       if ( meet_location ) {
         meet_location.setPosition(location);
       } else {
+
         meet_location = new google.maps.Marker({
           position: location,
           map: map
         });
       }
+      client.setGoal(location);
     }
 
     google.maps.event.addListener(map, 'click', function(event) {
