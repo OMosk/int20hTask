@@ -9,7 +9,11 @@
       if (users[i].infowindow){
         users[i].infowindow.close();
       }
+      if (users[i].marker){
+          users[i].marker.setMap(null);
+      }
     }
+
 
       if (window.stateStore.data.activeGroup.users[i].geo_location){
         var location =  window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
@@ -45,7 +49,7 @@
           uluru = {
             lat:parseFloat(array[0]),
             lng:parseFloat(array[1])
-          }
+          };
 
           let marker = new google.maps.Marker({
             position: uluru,
