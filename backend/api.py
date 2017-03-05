@@ -191,10 +191,15 @@ def get_user(user_id, db):
         return {}
 
 def set_goal(action, db):
-    sql = """UPDATE groups SET geo_location = %(geo_location)s
-        WHERE id = %(group_id)s
-    """
-    db.execute(sql, action)
+    try:
+        sql = """UPDATE groups SET geo_location = %(geo_location)s
+            WHERE id = %(group_id)s
+        """
+        db.execute(sql, action)
+        return None, True
+    except Exception as e:
+        print e
+        return e, False
 
 
 
