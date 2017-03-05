@@ -53,6 +53,10 @@
       console.log('authorizing');
       this.authorize();
     }
+    var client = this;
+    this.inverval = setInverval(function(){
+      client.ws.send(JSON.stringify({actions:[]}));
+    }, 1000 * 60);
   }
   Client.prototype.onmessage = function(e) {
     //try {
@@ -68,6 +72,10 @@
   Client.prototype.onclose = function() {
     this.ws = null;
     console.log('closed');
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
     if (this.shouldReconnect) {
       console.log("reconnecting");
       this.connect();
@@ -88,10 +96,29 @@
       delete this.sentActions[action.actionId].cb;
       cb(action);
     }
+    if (action.type == 'sent_message') {
+      var groups = groupStore.data;
+      for (var i = 0; i < groups.length; ++i) {
+        var group = groups[i];
+        if (group.group_id == action.group_id) {
+          for (var j = 0; group.users.length; ++j) {
+            var user = group.users[j];
+            if (user.id == action.user_id) {
+
+            }
+          }
+        }
+      }
+    }
   }
 
   Client.prototype.onLocationUpdate = function(res) {
     this.location = res.coords.latitude + ' ' + res.coords.longitude;
+    this.makeAction({
+      type: 'update_location',
+      user_id: this.id,
+      geoLocation: this.location
+    });
     console.log('Current location', this.location);
   }
 
@@ -233,6 +260,29 @@
     }, function(res) {
       if (res.users) {
         usersStore.set(res.users);
+        cb(true);
+      } else {
+        console.log(res);
+        cb(false);
+      }
+    });
+  }
+
+  Client.prototype.changeCurrentGroup = function(group) {
+    var state = stateStore.data;
+    state.activeGroup = group;
+    stateStore.set(state);
+  }
+
+  Client.prototype.sentMessage = function(text, cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'sent_message',
+      user_id: this.id,
+      group_id: stateStore.data.activeGroup.group_id,
+      text: text
+    }, function(res) {
+      if (!res.error) {
         cb(true);
       } else {
         console.log(res);

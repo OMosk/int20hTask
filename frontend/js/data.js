@@ -27,3 +27,13 @@ window.groupStore = {
   }
 };
 
+window.stateStore = {
+  data: {}, //
+  notifier: new EventEmitter(),
+  set: function(data) {
+    this.data = data;
+    this.notifier.emit('change', data);
+  }
+};
+
+
