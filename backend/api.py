@@ -160,3 +160,16 @@ def get_bubble(group_id, user_id, db):
     if bubbles:
         bubbles = bubbles[0]
     return bubbles
+
+
+def update_location(action, db):
+    try:
+        sql = """
+            UPDATE users SET geo_location = %(geoLocation)s
+            WHERE provider_id = %(user_id)s
+        """
+        db.execute(sql, action)
+        return None, True
+    except Exception as e:
+        print e
+        return e, False

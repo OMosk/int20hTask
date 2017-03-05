@@ -90,3 +90,12 @@ def invite_into_group(socket, action, db):
         elif api.user_in_group(sock.id, action['group_id'], db):
             sock.write_message(action)
 
+
+def update_location(action, db):
+    response_action = {}
+    e, success = api.update_location(action, db)
+    if not success:
+        response_action['error'] = str(e)
+    else:
+        response_action = action
+    return response_action
