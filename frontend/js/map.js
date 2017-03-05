@@ -6,7 +6,7 @@
 
     for (let i=0; i<users.length; i++){
       if (users[i].infowindow){
-          users[i].infowindow.close();
+        users[i].infowindow.close();
       }
     }
 
@@ -67,9 +67,9 @@
 
         }
 
-        map.addListener('click', function() {
-          infowindow.close(map, marker);
-        });
+        //map.addListener('click', function() {
+        //  infowindow.close(map, marker);
+        //});
 
         var meet_location = new google.maps.Marker({
           map: map,
