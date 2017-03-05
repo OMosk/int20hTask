@@ -175,6 +175,25 @@ def update_location(action, db):
         return e, False
 
 
+def get_user(user_id, db):
+    sql = """ SELECT photo, name, geo_location FROM users WHERE provider_id = %s"""
+    db.execute(sql, [user_id, ])
+    user = db.fetchall()
+    if user:
+        return {"name": user[0]['name'],
+                "photo": user[0]['photo',
+                "geo_location": user[0]['geo_location']}
+    else:
+        return {}
+
+def set_goal(action, db):
+    sql = """UPDATE groups SET geo_location = %(geo_location)s
+        WHERE id = %(group_id)s
+    """
+    db.execute(sql, action)
+
+
+
 def delete_user_from_group(action, db):
     try:
         sql = """
