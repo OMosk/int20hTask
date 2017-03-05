@@ -43,10 +43,6 @@
 
         }
 
-        setTimeout(function() {
-          infowindow.open(map, marker);
-        }, 3000);
-
 
         marker.addListener('click', function() {
           infowindow.open(map, marker);
@@ -102,6 +98,3 @@
         center: uluru
       });
   }
-
-
-  
