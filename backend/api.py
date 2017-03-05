@@ -162,7 +162,7 @@ def get_bubble(group_id, user_id, db):
     db.execute(sql, values)
     bubbles = db.fetchall()
     if bubbles:
-        bubbles = bubbles[0]
+        bubbles = bubbles[0][0]
     return bubbles
 
 
