@@ -10,7 +10,6 @@ $(document).ready(function () {
     var li_id = document.createAttribute('data-id');
     li_id.value = window.groupStore.data[i].group_id;
     li.setAttributeNode(li_id);
-
     var a = document.createElement('a');
     a.href = "#";
     li.appendChild(a);
@@ -51,6 +50,8 @@ $('ul.sidebar-nav li').on('click', function(){
 
   for (let i in window.groupStore.data ){
       if (domElem.getAttribute('data-id') ===  window.groupStore.data[i].group_id){
+        for (let j in  window.groupStore.data[i].users){
+
         var sidebar = document.querySelector("ul.list-group");
 
         while (sidebar.children.length !==0) {
@@ -58,21 +59,21 @@ $('ul.sidebar-nav li').on('click', function(){
         }
 
         for (let j in window.groupStore.data[i].users ){
-          var li = document.createElement('li');
-          var li_class = document.createAttribute("class");
-          li_class.value = 'list-group-item';
+            var li = document.createElement('li');
+            var li_class = document.createAttribute("class");
+            li_class.value = 'list-group-item';
 
-          li.setAttributeNode(li_class);
+            li.setAttributeNode(li_class);
 
-          li.appendChild(document.createTextNode(window.groupStore.data[i].users[j]));
+            li.appendChild(document.createTextNode(window.groupStore.data[i].users[j].name));
 
-          var span = document.createElement("span");
-          var span_class = document.createAttribute('class');
-          span_class.value = 'glyphicon glyphicon-remove pull-right';
-          span.setAttributeNode(span_class);
-          li.appendChild(span);
-          sidebar.appendChild(li);
-
+            var span = document.createElement("span");
+            var span_class = document.createAttribute('class');
+            span_class.value = 'glyphicon glyphicon-remove pull-right';
+            span.setAttributeNode(span_class);
+            li.appendChild(span);
+            sidebar.appendChild(li);
+          }
         }
       }
     }

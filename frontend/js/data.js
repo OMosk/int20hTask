@@ -32,7 +32,13 @@ window.groupStore = {
   data: [{
    group_id: "sf",
    group_name: "family",
-   users: ["boromir", "moskal"]
+   users: [{
+    id:'213',
+    photo:'img/oval-face.png',
+    geo_location:'50.23 30.31',
+    name:'boromir',
+    message:'aslfjasfj'
+  }]
 }],
   notifier: new EventEmitter(),
   set: function(data) {
@@ -42,7 +48,18 @@ window.groupStore = {
 };
 
 window.stateStore = {
-  data: {}, //
+  data: {
+    activeGroup:{
+      group_id: "sf",
+      group_name: "family",
+      users: [{
+       id:'213',
+       photo:'img/oval-face.png',
+       geo_location:'50.23 30.31',
+       name:'boromir',
+       message:'aslfjasfj'
+     }]
+  }},
   notifier: new EventEmitter(),
   set: function(data) {
     this.data = data;
