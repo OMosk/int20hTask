@@ -67,15 +67,15 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 conn.commit()
                 continue
             elif action['type'] == 'invite_into_group':
-                response = router.invite_into_group(self, action, db)
+                response = router.invite_into_group(self, global_dict, action, db)
                 conn.commit()
                 continue
             elif action['type'] == 'delete_from_group':
-                response = router.delete_from_group(self, action, db)
+                response = router.delete_from_group(self, global_dict, action, db)
                 conn.commit()
                 continue
             elif action['type'] == 'set_goal':
-                response = router.set_goal(self, action, db)
+                response = router.set_goal(self, global_dict, action, db)
                 conn.commit()
                 continue
             elif action['type'] == 'update_location':
