@@ -86,9 +86,24 @@ def invite_into_group(socket, action, db):
     api.add_user_to_group(params, db)
     for sock in socket.application.webSocketsPool:
         if sock.id == action['guest_id']:
-            sock.write_message(action)
+            actions = {"actions": [action, ]}
+            sock.write_message(actions)
         elif api.user_in_group(sock.id, action['group_id'], db):
-            sock.write_message(action)
+            actions = {"actions": [action, ]}
+            sock.write_message(actions)
+
+
+def delete_from_group(socket, action, db):
+    response_action = {}
+    e, success = api.delete_user_from_group(action, db)
+    if success:
+        for sock in socket.application.webSocketsPool:
+            if api.user_in_group(sock.id, action['group_id'], db):
+                sock.write_message(action)
+    else:
+        response_action['error'] = str(e)
+        return response_action
+
 
 
 def update_location(action, db):
