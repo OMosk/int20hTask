@@ -80,7 +80,6 @@
 
         groupStore.notifier.on('setGoal', function(data){
           if(stateStore.data.activeGroup.group_id === data.group_id ){
-          console.log("test");
           var location =  data.geo_location.split(' ');
 
           placeMarker({
@@ -98,3 +97,19 @@
         center: uluru
       });
   }
+
+
+  stateStore.notifier.on('new_message', function(message){
+      if (message.group_id === stateStore.data.activeGroup){
+          for (var i=0; i<users.length; ++i){
+            if (messsage.user_id === users[i].user.id){
+              users[i].infowindow.setContentHTML('<div id="bubble">'+
+                  '<div id="bodyContent">'+
+                  message.text+
+                  '</div>'+
+                  '</div>');
+              users[i].infowindow.open();
+            }
+          }
+      }
+  });
