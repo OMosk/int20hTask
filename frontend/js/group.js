@@ -50,12 +50,15 @@ groupStore.notifier.on('change', function(){
         $(this).addClass("green");
       }
     });
+function renderUsersModal() {
+}
 
 $('ul.sidebar-nav li').on('click', function(){
   var domElem = $(this).get(0);
   console.log('onclick fired');
   for (let i = 0; i < window.groupStore.data.length; ++i) {
       if (domElem.getAttribute('data-id') ==  window.groupStore.data[i].group_id){
+        stateStore.data.editing_group = window.groupStore.data[i];
         console.log('neeeded group');
 
         var sidebar = document.querySelector("ul.list-group");
@@ -84,10 +87,56 @@ $('ul.sidebar-nav li').on('click', function(){
     }
 
     for (let i=0; i<usersStore.data.length; ++i){
+      console.log('filing dropdown lisst');
       var new_option = document.createElement('option');
-      new_option.value = usersStore.data[i].id;
+      new_option.value = usersStore.data[i].name;
       new_option.setAttribute('data-input-id',usersStore.data[i].id);
+      if (usersStore.data[i].id == client.id) continue;
+      $("#browsers").append(new_option);
     }
+});
+
+$("#memberGroup > div > div > form > div > div.form-group > button").on('click', function() {
+  var yourSelect = document.getElementById( "dropdownInput" );
+  var datalist = document.getElementById( "browsers" );
+  //console.log(yourSelect.options);
+  console.log(yourSelect.value);
+  //console.log(yourSelect.text);
+  //console.log(yourSelect.option);
+  //var option = yourSelect.options[yourSelect.selectedIndex];
+  //console.log(option);
+  //alert( yourSelect.options[ yourSelect.selectedIndex ].value );
+  for (let i = 0; i < datalist.options.length; ++i) {
+    var option = datalist.options[i];
+    if (option.value == yourSelect.value) {
+      var id = option.getAttribute("data-input-id");
+      for (let j = 0; j < usersStore.data.length; ++j) {
+        var user = usersStore.data[j];
+        if (user.id == id) {
+          client.addToGroup(stateStore.data.editing_group, user, function() {
+            for (let j in stateUser.data.editing_group.users ){
+              var li = document.createElement('li');
+              var li_class = document.createAttribute("class");
+              li_class.value = 'list-group-item';
+
+              li.setAttributeNode(li_class);
+
+              li.appendChild(document.createTextNode(stateStore.data.editing_group.users[j].name));
+
+              var span = document.createElement("span");
+              var span_class = document.createAttribute('class');
+              span_class.value = 'glyphicon glyphicon-remove pull-right';
+              span.setAttributeNode(span_class);
+              li.appendChild(span);
+              sidebar.appendChild(li);
+            }
+
+          });
+          return;
+        }
+      }
+    }
+  }
 });
 
 });
