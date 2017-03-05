@@ -79,3 +79,38 @@ def sent_message(socket, action, db):
         if api.user_in_group(sock.id, action['group_id'], db):
             sock.write_message(action)
 
+
+def invite_into_group(socket, action, db):
+    params = {"group_id": action['group_id'],
+              "user_id": action["guest_id"]}
+    api.add_user_to_group(params, db)
+    for sock in socket.application.webSocketsPool:
+        if sock.id == action['guest_id']:
+            actions = {"actions": [action, ]}
+            sock.write_message(actions)
+        elif api.user_in_group(sock.id, action['group_id'], db):
+            actions = {"actions": [action, ]}
+            sock.write_message(actions)
+
+
+def delete_from_group(socket, action, db):
+    response_action = {}
+    e, success = api.delete_user_from_group(action, db)
+    if success:
+        for sock in socket.application.webSocketsPool:
+            if api.user_in_group(sock.id, action['group_id'], db):
+                sock.write_message(action)
+    else:
+        response_action['error'] = str(e)
+        return response_action
+
+
+
+def update_location(action, db):
+    response_action = {}
+    e, success = api.update_location(action, db)
+    if not success:
+        response_action['error'] = str(e)
+    else:
+        response_action = action
+    return response_action
