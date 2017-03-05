@@ -5,7 +5,6 @@ html, body {
 
 #map {
   height: 100%;
-  border: 5px solid gray;
   position: relative;
 }
 
@@ -19,4 +18,35 @@ html, body {
   position: absolute;
   top:0;
   right:0;
+}
+
+
+.green, .glyphicon-ok:hover {
+  color: green;
+}
+
+.message{
+  margin-right: 40px;
+  border-radius: 10px;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19) !important;
+  margin-bottom:15px;
+}
+
+.messageButton{
+  width:65px;
+}
+
+
+@media (max-width: 500px) {
+
+}
+
+@media (min-width: 800px) {
+  #message{
+    width:600px;
+  }
+}
+
+#bubble{
+  text-align: center;
 }
