@@ -88,38 +88,41 @@ def sent_message(socket, action, global_dict, db):
                 sock.write_message(actions)
 
 
-def invite_into_group(socket, action, db):
+def invite_into_group(socket, global_dict, action, db):
     params = {"group_id": action['group_id'],
               "user_id": action["guest_id"]}
     api.add_user_to_group(params, db)
     action['guest'] = api.get_user(action["guest_id"], db)
     for sock in socket.application.webSocketsPool:
-        if sock.__id == action['guest_id']:
+        sock_id = global_dict[sock]
+        if sock_id == action['guest_id']:
             group = api.get_all_groups(action, db, group_id=action['group_id'])[0]
             action['group'] = group
             actions = {"actions": [action, ]}
             sock.write_message(actions)
-        elif api.user_in_group(sock.__id, action['group_id'], db):
+        elif api.user_in_group(sock_id, action['group_id'], db):
             actions = {"actions": [action, ]}
             sock.write_message(actions)
 
 
-def delete_from_group(socket, action, db):
+def delete_from_group(socket, global_dict, action, db):
     response_action = {}
     e, success = api.delete_user_from_group(action, db)
     if success:
         for sock in socket.application.webSocketsPool:
-            if api.user_in_group(sock.__id, action['group_id'], db):
+            sock_id = global_dict[sock]
+            if api.user_in_group(sock_id, action['group_id'], db):
                 sock.write_message(action)
     else:
         response_action['error'] = str(e)
         return response_action
 
 
-def set_goal(socket, action, db):
+def set_goal(socket, global_dict, action, db):
     api.set_goal(action, db)
     for sock in socket.application.webSocketsPool:
-            if api.user_in_group(sock.__id, action['group_id'], db):
+            sock_id = global_dict[sock]
+            if api.user_in_group(sock_id, action['group_id'], db):
                 actions = {"actions": [action, ]}
                 sock.write_message(actions)
 
