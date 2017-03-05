@@ -59,18 +59,23 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 response = router.get_all_groups(action, db)
             elif action['type'] == 'sent_message':
                 response = router.sent_message(self, action, db)
+                conn.commit()
                 continue
             elif action['type'] == 'invite_into_group':
                 response = router.invite_into_group(self, action, db)
+                conn.commit()
                 continue
             elif action['type'] == 'delete_from_group':
                 response = router.delete_from_group(self, action, db)
+                conn.commit()
                 continue
             elif action['type'] == 'set_goal':
                 response = router.set_goal(self, action, db)
+                conn.commit()
                 continue
             elif action['type'] == 'update_location':
                 response = router.update_location(action, db)
+                conn.commit()
 
             else:
                 response['error'] = "sorry, no such action"
