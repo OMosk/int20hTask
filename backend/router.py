@@ -79,11 +79,13 @@ def sent_message(socket, action, global_dict, db):
         if hasattr(sock, '__id'):
             if sock.__id:
                 if api.user_in_group(sock.__id, action['group_id'], db):
-                    sock.write_message(action)
+                    actions = {"actions": [action, ]}
+                    sock.write_message(actions)
         else:
             sock_id = global_dict[sock]
             if api.user_in_group(sock_id, action['group_id'], db):
-                sock.write_message(action)
+                actions = {"actions": [action, ]}
+                sock.write_message(actions)
 
 
 def invite_into_group(socket, action, db):
