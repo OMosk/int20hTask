@@ -173,3 +173,17 @@ def update_location(action, db):
     except Exception as e:
         print e
         return e, False
+
+
+def delete_user_from_group(action, db):
+    try:
+        sql = """
+            DELETE FROM group_users
+            WHERE group_id = %(group_id)s
+            AND user_id = %(user_id)s
+        """
+        db.execute(sql, action)
+        return None, True
+    except Exception as e:
+        print e
+        return e, False
