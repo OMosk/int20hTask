@@ -42,11 +42,11 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 response = router.register(action, db)
                 conn.commit()
                 if 'error' not in response.keys():
-                    self.id = action["provider"] + action['providerUserId']
+                    self.__id = action["provider"] + action['providerUserId']
             elif action["type"] == "auth":
                 response = router.auth(action, db)
                 if 'error' not in response.keys():
-                    self.id = response['provider_id']
+                    self.__id = response['provider_id']
             elif action["type"] == "create_group":
                 response = router.create_group(action, db)
                 conn.commit()
