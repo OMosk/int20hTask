@@ -96,7 +96,6 @@ class WebSocket(tornado.websocket.WebSocketHandler):
 class Application(tornado.web.Application):
     def __init__(self):
         self.webSocketsPool = []
-        self.id = 0
 
         settings = {
             'static_url_prefix': '/static/',
