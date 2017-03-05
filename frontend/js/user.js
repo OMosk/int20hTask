@@ -2,6 +2,7 @@ function myFunction(event){
   event.preventDefault();
   var value = $('#message').val();
   client.sendMessage(value);
+  $('#message').val('');
   console.log(value);
   return false;
 }

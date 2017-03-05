@@ -83,7 +83,7 @@ $('ul.sidebar-nav li').on('click', function(){
       }
     }
 
-    for (let i=0; i<usersStore.data.length; ++i){
+    for (let i=0; i<usersStore.data.length; ++i){x
       var new_option = document.createElement('option');
       new_option.value = usersStore.data[i].id;
       new_option.setAttribute('data-input-id',usersStore.data[i].id);
