@@ -88,19 +88,23 @@ def get_all_users(db):
         print e
         return e, False
 
-def get_all_groups(action, db):
+def get_all_groups(action, db, group_id = None):
     try:
         sql = """SELECT gr.name, gu.group_id
             from groups gr LEFT OUTER JOIN group_users gu
             ON gr.id = gu.group_id
             WHERE gu.user_id = %(user_id)s
             """
+        if group_id:
+            sql += " AND gr.id = %(group_id)s"
+        action['group_id'] = group_id
         db.execute(sql, action)
         raw_groups = db.fetchall()
         groups = []
         for raw_group in raw_groups:
             group = {"name": raw_group['name'],
-                     "group_id": raw_group["group_id"]}
+                     "group_id": raw_group["group_id",
+                     "geo_location": raw_group["geo_location"]}
             sql = """SELECT users.* from
                 users LEFT OUTER JOIN group_users gu
                 ON users.provider_id = gu.user_id
@@ -173,6 +177,25 @@ def update_location(action, db):
     except Exception as e:
         print e
         return e, False
+
+
+def get_user(user_id, db):
+    sql = """ SELECT photo, name, geo_location FROM users WHERE provider_id = %s"""
+    db.execute(sql, [user_id, ])
+    user = db.fetchall()
+    if user:
+        return {"name": user[0]['name'],
+                "photo": user[0]['photo',
+                "geo_location": user[0]['geo_location']}
+    else:
+        return {}
+
+def set_goal(action, db):
+    sql = """UPDATE groups SET geo_location = %(geo_location)s
+        WHERE id = %(group_id)s
+    """
+    db.execute(sql, action)
+
 
 
 def delete_user_from_group(action, db):

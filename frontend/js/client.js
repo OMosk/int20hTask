@@ -96,6 +96,7 @@
       delete this.sentActions[action.actionId].cb;
       cb(action);
     }
+
     if (action.type == 'sent_message') {
       var groups = groupStore.data;
       for (var i = 0; i < groups.length; ++i) {
@@ -104,11 +105,73 @@
           for (var j = 0; group.users.length; ++j) {
             var user = group.users[j];
             if (user.id == action.user_id) {
-
+              user.message = action.text;
+              //TODO show message
             }
           }
         }
       }
+    }
+
+    if (action.type == 'update_location') {
+      var groups = groupStore.data;
+      for (var i = 0; i < groups.length; ++i) {
+        var group = groups[i];
+        for (var j = 0; group.users.length; ++j) {
+          var user = group.users[j];
+          if (user.id == action.user_id) {
+            user.get_location = action.geoLocation;
+          }
+        }
+      }
+      groupStore.set(groups);
+      //TODO update locations
+    }
+
+    if (action.type == 'invite_into_group') {
+      var found = false;
+      var groups = groupStore.data;
+      for (var i = 0; i < groups.length; ++i) {
+        var group = groups[i];
+        if (group.group_id == action.group_id) {
+          found = true;
+          group.users.push(action.guest);
+          //TODO new user event
+        }
+      }
+      if (!found) {
+        //You are 
+      }
+      groupStore.set(groups);
+    }
+
+    if (action.type == 'delete_from_group') {
+      var groups = groupStore.data;
+      for (var i = 0; i < groups.length; ++i) {
+        var group = groups[i];
+        if (group.group_id == action.group_id) {
+          for (var j = 0; group.users.length; ++j) {
+            var user = group.users[j];
+            if (user.id == action.user_id) {
+              group.users.splice(j, 1);
+              //TODO hide marker
+            }
+          }
+        }
+      }
+      groupStore.set(groups);
+    }
+
+    if (action.type == 'set_goal') {
+      var groups = groupStore.data;
+      for (var i = 0; i < groups.length; ++i) {
+        var group = groups[i];
+        if (group.group_id == action.group_id) {
+          group.geo_location = action.geo_location; 
+          //TODO group goal changed
+        }
+      }
+      groupStore.set(groups);
     }
   }
 
@@ -250,7 +313,19 @@
   }
 
   Client.prototype.removeFromGroup = function(group, user, cb) {
-
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'delete_from_group',
+      user_id: user.id,
+      group_id: group.group_id
+    }, function(res) {
+      if (res.error) {
+        console.log(res);
+        cb(false);
+      } else {
+        cb(true);
+      }
+    });
   }
 
   Client.prototype.getAllUsers = function(cb) {
@@ -274,13 +349,29 @@
     stateStore.set(state);
   }
 
-  Client.prototype.sentMessage = function(text, cb) {
+  Client.prototype.sendMessage = function(text, cb) {
     if (typeof cb === 'undefined') cb = function() {};
     this.makeAction({
       type: 'sent_message',
       user_id: this.id,
       group_id: stateStore.data.activeGroup.group_id,
       text: text
+    }, function(res) {
+      if (!res.error) {
+        cb(true);
+      } else {
+        console.log(res);
+        cb(false);
+      }
+    });
+  }
+
+  Client.prototype.setGoal = function(goal, cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'set_goal',
+      group_id: stateStore.data.activeGroup.group_id,
+      geo_location: goal
     }, function(res) {
       if (!res.error) {
         cb(true);

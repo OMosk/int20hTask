@@ -65,6 +65,9 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             elif action['type'] == 'delete_from_group':
                 response = router.delete_from_group(self, action, db)
                 continue
+            elif action['type'] == 'set_goal':
+                response = router.set_goal(self, action, db)
+                continue
             elif action['type'] == 'update_location':
                 response = router.update_location(action, db)
 
