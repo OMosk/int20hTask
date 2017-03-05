@@ -44,10 +44,25 @@ groupStore.notifier.on('change', function(){
       console.log("her");
       if ($(this).hasClass('green')){
         $(this).addClass("green");
+        var domElem = $(this).get(0);
+        var id = domElem.getAttribute('data-id');
+        for (var i=0; i<groupStore.data.length; i++){
+          if (id === groupStore.data[i].group_id){
+            client.changeCurrentGroup(groupStore.data[i]);
+          }
+        }
       }
       else{
         $('.glyphicon-ok').removeClass('green');
         $(this).addClass("green");
+        var domElem = $(this).get(0);
+        var id = domElem.getAttribute('data-id');
+        for (var i=0; i<groupStore.data.length; i++){
+          if (id === groupStore.data[i].group_id){
+            client.changeCurrentGroup(groupStore.data[i]);
+          }
+        }
+
       }
     });
 function renderUsersModal() {
@@ -99,13 +114,7 @@ $('ul.sidebar-nav li').on('click', function(){
 $("#memberGroup > div > div > form > div > div.form-group > button").on('click', function() {
   var yourSelect = document.getElementById( "dropdownInput" );
   var datalist = document.getElementById( "browsers" );
-  //console.log(yourSelect.options);
   console.log(yourSelect.value);
-  //console.log(yourSelect.text);
-  //console.log(yourSelect.option);
-  //var option = yourSelect.options[yourSelect.selectedIndex];
-  //console.log(option);
-  //alert( yourSelect.options[ yourSelect.selectedIndex ].value );
   for (let i = 0; i < datalist.options.length; ++i) {
     var option = datalist.options[i];
     if (option.value == yourSelect.value) {
