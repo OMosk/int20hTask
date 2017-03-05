@@ -5,6 +5,8 @@
       }
 
       for (var i in window.groupStore.data ){
+
+
         var li = document.createElement('li');
         var li_id = document.createAttribute('data-id');
         li_id.value = window.groupStore.data[i].group_id;
@@ -27,6 +29,7 @@
         var span = document.createElement('span');
         var span_class = document.createAttribute("class");
         var span_id = document.createAttribute("data-id-span");
+
         span_id.value = window.groupStore.data[i].group_id;
 
 
@@ -36,6 +39,13 @@
         a.appendChild(span);
 
         sidebar.appendChild(li);
+
+
+        if (window.stateStore.data.activeGroup ==
+            window.groupStore.data[i]) {
+            //  $(span).addClass("green");
+                span_class.value ="glyphicon glyphicon-ok pull-right green";
+        }
       }
     }
 
