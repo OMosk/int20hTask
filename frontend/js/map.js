@@ -4,11 +4,11 @@
 
   function renderMarkers (){
 
-  for (let i=0; i<users.length; i++){
-    if (users[i].infowindow){
-        infowindow.close();
+    for (let i=0; i<users.length; i++){
+      if (users[i].infowindow){
+        users[i].infowindow.close();
+      }
     }
-  }
 
 
         for (var i in window.stateStore.data.activeGroup.users ){
@@ -59,9 +59,9 @@
 
         }
 
-        map.addListener('click', function() {
-          infowindow.close(map, marker);
-        });
+        //map.addListener('click', function() {
+        //  infowindow.close(map, marker);
+        //});
 
         var meet_location = new google.maps.Marker({
           map: map,

@@ -169,6 +169,7 @@
         var group = groups[i];
         if (group.group_id == action.group_id) {
           group.geo_location = action.geo_location;
+          groupStore.notifier.emit('setGoal', action);
           //TODO group goal changed
         }
       }
