@@ -88,13 +88,16 @@ def get_all_users(db):
         print e
         return e, False
 
-def get_all_groups(action, db):
+def get_all_groups(action, db, group_id = None):
     try:
         sql = """SELECT gr.name, gu.group_id
             from groups gr LEFT OUTER JOIN group_users gu
             ON gr.id = gu.group_id
             WHERE gu.user_id = %(user_id)s
             """
+        if group_id:
+            sql += " AND gr.id = %(group_id)s"
+        action['group_id'] = group_id
         db.execute(sql, action)
         raw_groups = db.fetchall()
         groups = []
