@@ -73,7 +73,7 @@ def add_user_to_group(action, db):
             sql = """INSERT INTO group_users (group_id, user_id)
                 VALUES (%(group_id)s, %(user_id)s)"""
             db.execute(sql, action)
-            return values, True
+            return action, True
         except Exception as e:
             print e
             return e, False
