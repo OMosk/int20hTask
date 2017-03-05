@@ -20,7 +20,7 @@
         target.value = "#memberGroup";
         span_modal.setAttributeNode(toggle);
         span_modal.setAttributeNode(target);
-        span_modal.appendChild(document.createTextNode(window.groupStore.data[i].group_name));
+        span_modal.appendChild(document.createTextNode(window.groupStore.data[i].name));
 
         a.appendChild(span_modal);
 
