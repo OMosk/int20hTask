@@ -24,6 +24,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
         self.application.webSocketsPool.append(self)
 
     def on_message(self, message):
+        conn = self.application.conn
         db = self.application.db
 
         message_dict = json.loads(message)
@@ -38,15 +39,28 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                                }
             if action["type"] == "registration":
                 response = router.register(action, db)
-
+                conn.commit()
+                if 'error' not in response.keys():
+                    self.id = action["provider"] + action['providerUserId']
             elif action["type"] == "auth":
                 response = router.auth(action, db)
+                if 'error' not in response.keys():
+                    self.id = response['provider_id']
             elif action["type"] == "create_group":
                 response = router.create_group(action, db)
+                conn.commit()
             elif action["type"] == "get_all_users":
                 response = router.get_all_users(db)
+            elif action["type"] == "add_to_group":
+                response = router.add_to_group(action, db)
+                conn.commit()
+            elif action["type"] == "get_all_groups":
+                response = router.get_all_groups(action, db)
+            elif action['type'] == 'sent_message':
+                response = router.sent_message(self, action, db)
+                continue
             else:
-                response_action['message'] = "sorry, no such action"
+                response['error'] = "sorry, no such action"
             response_action.update(response)
             response_actions.append(response_action)
         response = {'actions': response_actions}
@@ -69,7 +83,7 @@ class Application(tornado.web.Application):
             'static_url_prefix': '/static/',
         }
         self.conn = psycopg2.connect("dbname='chat' user='dbuser' host='localhost' password='dbpass'")
-        self.db = self.conn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        self.db = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         handlers = (
             (r'/', MainHandler),
             (r'/api?', WebSocket),

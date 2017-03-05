@@ -24,7 +24,7 @@
   }
 
   function Client() {
-    this.wsConnectionString = 'ws://192.168.32.185/api';
+    this.wsConnectionString = 'wss://' + location.host + '/api';
     this.actionId = 0;
     this.isConnected = false;
     this.isAuthorized = false;
@@ -32,6 +32,7 @@
     this.fbStatus = 'unknown';
     this.token = getCookie("token");
     this.location = '';
+    this.shouldReconnect = true;
   };
 
   Client.prototype.connect = function() {
@@ -48,21 +49,29 @@
   Client.prototype.onopen = function() {
     this.isConnected = true;
     console.log('connected');
+    if (this.shouldReconnect && this.token) {
+      console.log('authorizing');
+      this.authorize();
+    }
   }
   Client.prototype.onmessage = function(e) {
-    try {
+    //try {
       var message = JSON.parse(e.data);
       var actions = message.actions;
       for (let i = 0; i < actions.length; ++i) {
         this.onAction(actions[i]);
       }
-    } catch(e) {
-      console.log(e);
-    }
+    //} catch(e) {
+    //  console.log(e);
+    //}
   }
   Client.prototype.onclose = function() {
     this.ws = null;
     console.log('closed');
+    if (this.shouldReconnect) {
+      console.log("reconnecting");
+      this.connect();
+    }
   }
 
 
@@ -90,6 +99,24 @@
     console.log('Location error', res);
   }
 
+  Client.prototype.authorize = function(cb) {
+    var client = this;
+    if (typeof cb === 'undefined') cb = function(){};
+    this.makeAction({
+      type: 'auth',
+      token: this.token
+    }, function(res) {
+      if (!res.error) {
+        client.id = res.provider_id;
+        res.id = res.provider_id;
+        userStore.set(res);
+        cb(true);
+      } else {
+        cb(false);
+      }
+    });
+  }
+
   Client.prototype.register = function(cb) {
     if (typeof cb === 'undefined') cb = () => {};
 
@@ -109,6 +136,21 @@
           };
           console.log('got fb data', action);
           client.makeAction(action, function(data) {
+            if (data.token) {
+              client.token = data.token;
+              client.id = data.providerUserId;
+
+              setCookie('token', client.token);
+
+              client.isAuthorized = true;
+              action.id = action.provider_id;
+
+              userStore.set(action);
+              cb(true);
+            } else {
+              console.log(data);
+              cb(false);
+            }
             console.log(data); 
           });
           //window.usersStore.set(data);
@@ -133,7 +175,70 @@
   }
   
   Client.prototype.createGroup = function(name, cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'create_group',
+      name: name,
+      user_id: this.id
+    }, function(res) {
+      if (res.success) {
+        let groups = groupStore.data;
+        groups.unshift({
+          name: name,
+          members: [userStore.data]
+        });
+        groupStore.set(res.groups);
+        cb(true);
+      } else {
+        console.log(res);
+        cb(false);
+      }
+    });
+  }
 
+  Client.prototype.getGroups = function(cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'get_all_groups',
+      user_id: this.id
+    }, function(res) {
+      if (res.groups) {
+        groupStore.set(res.groups);
+        cb(true);
+      } else {
+        console.log(res);
+        cb(false);
+      }
+    });
+  }
+
+  Client.prototype.addToGroup = function(group, user, cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'add_to_group',
+      group_id: group.group_id,
+      user_id: user.id
+    }, function(res) {
+    })
+  }
+
+  Client.prototype.removeFromGroup = function(group, user, cb) {
+
+  }
+  
+  Client.prototype.getAllUsers = function(cb) {
+    if (typeof cb === 'undefined') cb = function() {};
+    this.makeAction({
+      type: 'get_all_users'
+    }, function(res) {
+      if (res.users) {
+        usersStore.set(res.users);
+        cb(true);
+      } else {
+        console.log(res);
+        cb(false);
+      }
+    });
   }
 
 
