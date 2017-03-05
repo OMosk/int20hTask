@@ -45,6 +45,7 @@
             window.groupStore.data[i]) {
             //  $(span).addClass("green");
                 span_class.value ="glyphicon glyphicon-ok pull-right green";
+                span.setAttributeNode(span_class);
         }
       }
     }
