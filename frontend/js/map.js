@@ -10,11 +10,19 @@
       }
     }
 
+      if (window.stateStore.data.activeGroup.users[i].geo_location){
+        var location =  window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
+
+        placeMarker({
+          lat:parseFloat(location[0]),
+          lng:parseFloat(location[1])
+        });
+      }
 
         for (var i in window.stateStore.data.activeGroup.users ){
 
-
           let array = window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
+
           let contentString = '<div id="bubble">'+
               '<div id="bodyContent">'+
               window.stateStore.data.activeGroup.users[i].message+
@@ -107,6 +115,8 @@
         zoom: 8,
         center: uluru
       });
+
+
   }
 
 
