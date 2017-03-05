@@ -54,7 +54,7 @@
       this.authorize();
     }
     var client = this;
-    this.inverval = setInverval(function(){
+    this.inverval = setInterval(function(){
       client.ws.send(JSON.stringify({actions:[]}));
     }, 1000 * 60);
   }
@@ -200,6 +200,9 @@
         client.id = res.provider_id;
         res.id = res.provider_id;
         userStore.set(res);
+        state = stateStore.data;
+        state.isAuthorized = true;
+        stateStore.set(state);
         cb(true);
       } else {
         cb(false);
@@ -236,6 +239,11 @@
               action.id = action.provider_id;
 
               userStore.set(action);
+
+              state = stateStore.data;
+              state.isAuthorized = true;
+              stateStore.set(state);
+
               cb(true);
             } else {
               console.log(data);
