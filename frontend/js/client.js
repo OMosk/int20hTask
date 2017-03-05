@@ -140,7 +140,7 @@
         }
       }
       if (!found) {
-        //You are 
+        //You are
       }
       groupStore.set(groups);
     }
@@ -167,7 +167,7 @@
       for (var i = 0; i < groups.length; ++i) {
         var group = groups[i];
         if (group.group_id == action.group_id) {
-          group.geo_location = action.geo_location; 
+          group.geo_location = action.geo_location;
           //TODO group goal changed
         }
       }

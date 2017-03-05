@@ -37,6 +37,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             response_action = {'actionId': action['actionId'],
                                'type': action['type'],
                                }
+            response = {}
             if action["type"] == "registration":
                 response = router.register(action, db)
                 conn.commit()

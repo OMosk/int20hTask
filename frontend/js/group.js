@@ -35,6 +35,17 @@ $(document).ready(function () {
     sidebar.appendChild(li);
   }
 
+  // Select group and switch beetween them
+    $('.glyphicon-ok').on("click", function(){
+      if ($(this).hasClass('green')){
+        $(this).addClass("green");
+      }
+      else{
+        $('.glyphicon-ok').removeClass('green');
+        $(this).addClass("green");
+      }
+    });
+
 $('ul.sidebar-nav li').on('click', function(){
   var domElem = $(this).get(0);
 
