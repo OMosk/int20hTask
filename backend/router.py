@@ -73,13 +73,17 @@ def get_all_groups(action, db):
     return response_action
 
 
-def sent_message(socket, action, db):
+def sent_message(socket, action, global_dict, db):
     api.add_message_to_db(action, db)
     for sock in socket.application.webSocketsPool:
         if hasattr(sock, '__id'):
             if sock.__id:
                 if api.user_in_group(sock.__id, action['group_id'], db):
                     sock.write_message(action)
+        else:
+            sock_id = global_dict[sock]
+            if api.user_in_group(sock_id, action['group_id'], db):
+                sock.write_message(action)
 
 
 def invite_into_group(socket, action, db):

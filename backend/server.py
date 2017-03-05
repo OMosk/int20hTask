@@ -8,6 +8,7 @@ import psycopg2.extras
 
 import router
 
+global_dict = {}
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -23,6 +24,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
     def open(self):
         self.application.webSocketsPool.append(self)
         self.__id = ""
+        global_dict[self] = ""
 
     def on_message(self, message):
         conn = self.application.conn
@@ -44,10 +46,12 @@ class WebSocket(tornado.websocket.WebSocketHandler):
                 conn.commit()
                 if 'error' not in response.keys():
                     self.__id = action["provider"] + action['providerUserId']
+                    global_dict[self] = action["provider"] + action['providerUserId']
             elif action["type"] == "auth":
                 response = router.auth(action, db)
                 if 'error' not in response.keys():
                     self.__id = response['provider_id']
+                    global_dict[self] = response['provider_id']
             elif action["type"] == "create_group":
                 response = router.create_group(action, db)
                 conn.commit()
@@ -59,7 +63,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             elif action["type"] == "get_all_groups":
                 response = router.get_all_groups(action, db)
             elif action['type'] == 'sent_message':
-                response = router.sent_message(self, action, db)
+                response = router.sent_message(self, action, global_dict, db)
                 conn.commit()
                 continue
             elif action['type'] == 'invite_into_group':
