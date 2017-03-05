@@ -51,7 +51,7 @@
     console.log('connected');
     if (this.shouldReconnect && this.token) {
       console.log('authorizing');
-      this.authorize();
+      this.authorize(this.onAuth.bind(this));
     }
     var client = this;
     this.inverval = setInterval(function(){
@@ -94,7 +94,7 @@
     if (action.actionId && this.sentActions[action.actionId]) {
       let cb = this.sentActions[action.actionId].cb;
       delete this.sentActions[action.actionId].cb;
-      cb(action);
+      if (cb) cb(action);
     }
 
     if (action.type == 'sent_message') {
@@ -177,16 +177,33 @@
 
   Client.prototype.onLocationUpdate = function(res) {
     this.location = res.coords.latitude + ' ' + res.coords.longitude;
-    this.makeAction({
-      type: 'update_location',
-      user_id: this.id,
-      geoLocation: this.location
-    });
+    if (this.id) {
+      this.makeAction({
+        type: 'update_location',
+        user_id: this.id,
+        geoLocation: this.location
+      });
+    }
     console.log('Current location', this.location);
   }
 
   Client.prototype.onLocationError = function(res) {
     console.log('Location error', res);
+  }
+
+  Client.prototype.onAuth = function(res) {
+    var client = this;
+    this.getGroups(function(res){
+      if (res) {
+        if (groupStore.data.length == 0) {
+          client.createGroup(function() {
+            client.changeCurrentGroup(groups.data[0]);
+          })
+        } else {
+          client.changeCurrentGroup(groupStore.data[0]);
+        }
+      }
+    })
   }
 
   Client.prototype.authorize = function(cb) {
@@ -375,6 +392,8 @@
   }
 
   Client.prototype.setGoal = function(goal, cb) {
+    console.log(goal);
+    goal = goal.lat() + ' '  + goal.lng();
     if (typeof cb === 'undefined') cb = function() {};
     this.makeAction({
       type: 'set_goal',
@@ -392,6 +411,10 @@
 
 
 window.client = new Client();
+if (getCookie('token') != '') {
+  client.connect();
+}
+
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(client.onLocationUpdate.bind(client), client.onLocationError.bind(client), {
     enableHighAccuracy: true,
@@ -419,3 +442,7 @@ window.fbAsyncInit = function() {
 };
 
 })();
+
+function register() {
+  client.register(client.onAuth.bind(client));
+}
