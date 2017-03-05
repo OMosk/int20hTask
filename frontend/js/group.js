@@ -7,6 +7,10 @@ $(document).ready(function () {
 
   for (var i in window.groupStore.data ){
     var li = document.createElement('li');
+    var li_id = document.createAttribute('data-id');
+    li_id.value = window.groupStore.data[i].group_id;
+    li.setAttributeNode(li_id);
+
     var a = document.createElement('a');
     a.href = "#";
     li.appendChild(a);
@@ -31,8 +35,38 @@ $(document).ready(function () {
     sidebar.appendChild(li);
   }
 
-  for (var i in window.groupStore.data ){
-    
-}
+$('ul.sidebar-nav li').on('click', function(){
+  var domElem = $(this).get(0);
+
+  for (let i in window.groupStore.data ){
+      if (domElem.getAttribute('data-id') ===  window.groupStore.data[i].group_id){
+        var sidebar = document.querySelector("ul.list-group");
+
+        while (sidebar.children.length !==0) {
+          sidebar.removeChild(sidebar.children[0]);
+        }
+
+        for (let j in window.groupStore.data[i].users ){
+          var li = document.createElement('li');
+          var li_class = document.createAttribute("class");
+          li_class.value = 'list-group-item';
+
+          li.setAttributeNode(li_class);
+
+          li.appendChild(document.createTextNode(window.groupStore.data[i].users[j]));
+
+          var span = document.createElement("span");
+          var span_class = document.createAttribute('class');
+          span_class.value = 'glyphicon glyphicon-remove pull-right';
+          span.setAttributeNode(span_class);
+          li.appendChild(span);
+          sidebar.appendChild(li);
+
+        }
+      }
+    }
+});
+
+
 
 });
