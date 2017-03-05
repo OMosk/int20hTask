@@ -7,6 +7,8 @@ function myFunction(event){
   return false;
 }
 
+$('.message').on('submit', myFunction);
+
 stateStore.notifier.on('change', function(){
   if (stateStore.data.isAuthorized){
     console.log("asfs");
