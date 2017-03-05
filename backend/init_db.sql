@@ -9,6 +9,7 @@ CREATE TABLE users (
 CREATE TABLE groups(
     id INTEGER PRIMARY KEY DEFAULT NEXTVAL('user_ids'),
     name VARCHAR(64),
+    geo_location VARCHAR(200),
     group_user VARCHAR(120) references users(provider_id) 
 ); 
 
