@@ -26,14 +26,5 @@ $(document).ready(function () {
         $('#wrapper').toggleClass('toggled');
   });
 
-  // Select group and switch beetween them
-    $('.glyphicon-ok').on("click", function(){
-      if ($(this).hasClass('green')){
-        $(this).addClass("green");
-      }
-      else{
-        $('.glyphicon-ok').removeClass('green');
-        $(this).addClass("green");
-      }
-    });
+
 });
