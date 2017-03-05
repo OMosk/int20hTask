@@ -10,14 +10,14 @@
       }
     }
 
-      if (window.stateStore.data.activeGroup.users[i].geo_location){
-        var location =  window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
+    if (window.stateStore.data.activeGroup.geo_location){
+      var location =  window.stateStore.data.activeGroup.geo_location.split(' ');
 
-        placeMarker({
-          lat:parseFloat(location[0]),
-          lng:parseFloat(location[1])
-        });
-      }
+      placeMarker({
+        lat:parseFloat(location[0]),
+        lng:parseFloat(location[1])
+      });
+    }
 
         for (var i in window.stateStore.data.activeGroup.users ){
 
