@@ -20,6 +20,9 @@
       if (users[i].infowindow){
         users[i].infowindow.close();
       }
+      if (users[i].marker){
+          users[i].marker.setMap(null);
+      }
     }
 
     if (window.stateStore.data.activeGroup.geo_location){
@@ -56,7 +59,7 @@
           uluru = {
             lat:parseFloat(array[0]),
             lng:parseFloat(array[1])
-          }
+          };
 
           let marker = new google.maps.Marker({
             position: uluru,
