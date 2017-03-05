@@ -76,10 +76,10 @@
       clearInterval(this.interval);
       this.interval = null;
     }
-    if (this.shouldReconnect) {
-      console.log("reconnecting");
-      this.connect();
-    }
+    //if (this.shouldReconnect) {
+    //  console.log("reconnecting");
+    //  this.connect();
+    //}
   }
 
 
@@ -117,7 +117,7 @@
       var groups = groupStore.data;
       for (var i = 0; i < groups.length; ++i) {
         var group = groups[i];
-        for (var j = 0; group.users.length; ++j) {
+        for (var j = 0; j < group.users.length; ++j) {
           var user = group.users[j];
           if (user.id == action.user_id) {
             user.get_location = action.geoLocation;
@@ -196,14 +196,15 @@
     this.getGroups(function(res){
       if (res) {
         if (groupStore.data.length == 0) {
-          client.createGroup(function() {
+          client.createGroup(userStore.data.name, function() {
             client.changeCurrentGroup(groups.data[0]);
           })
         } else {
           client.changeCurrentGroup(groupStore.data[0]);
         }
       }
-    })
+    });
+    this.getAllUsers();
   }
 
   Client.prototype.authorize = function(cb) {
@@ -248,7 +249,7 @@
           client.makeAction(action, function(data) {
             if (data.token) {
               client.token = data.token;
-              client.id = data.providerUserId;
+              client.id = action.provider + action.providerUserId;
 
               setCookie('token', client.token);
 
@@ -372,6 +373,7 @@
     var state = stateStore.data;
     state.activeGroup = group;
     stateStore.set(state);
+    renderMarkers();
   }
 
   Client.prototype.sendMessage = function(text, cb) {
@@ -411,9 +413,7 @@
 
 
 window.client = new Client();
-if (getCookie('token') != '') {
-  client.connect();
-}
+client.connect();
 
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(client.onLocationUpdate.bind(client), client.onLocationError.bind(client), {

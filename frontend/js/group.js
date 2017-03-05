@@ -1,48 +1,47 @@
-$(document).ready(function () {
+    function renderSidebar(){
+      var sidebar = document.querySelector("ul.sidebar-nav");
+      while (sidebar.children.length > 2) {
+        sidebar.removeChild(sidebar.children[2]);
+      }
 
+      for (var i in window.groupStore.data ){
+        var li = document.createElement('li');
+        var li_id = document.createAttribute('data-id');
+        li_id.value = window.groupStore.data[i].group_id;
+        li.setAttributeNode(li_id);
+        var a = document.createElement('a');
+        a.href = "#";
+        li.appendChild(a);
 
-  function renderSidebar(){
-    var sidebar = document.querySelector("ul.sidebar-nav");
-    while (sidebar.children.length > 2) {
-      sidebar.removeChild(sidebar.children[2]);
+        var span_modal = document.createElement('span');
+        var toggle = document.createAttribute("data-toggle");
+        toggle.value = "modal";
+        var target = document.createAttribute("data-target");
+        target.value = "#memberGroup";
+        span_modal.setAttributeNode(toggle);
+        span_modal.setAttributeNode(target);
+        span_modal.appendChild(document.createTextNode(window.groupStore.data[i].name));
+
+        a.appendChild(span_modal);
+
+        var span = document.createElement('span');
+        var span_class = document.createAttribute("class");
+        span_class.value ="glyphicon glyphicon-ok pull-right";
+        span.setAttributeNode(span_class);
+        a.appendChild(span);
+
+        sidebar.appendChild(li);
+      }
     }
 
-    for (var i in window.groupStore.data ){
-      var li = document.createElement('li');
-      var li_id = document.createAttribute('data-id');
-      li_id.value = window.groupStore.data[i].group_id;
-      li.setAttributeNode(li_id);
-      var a = document.createElement('a');
-      a.href = "#";
-      li.appendChild(a);
 
-      var span_modal = document.createElement('span');
-      var toggle = document.createAttribute("data-toggle");
-      toggle.value = "modal";
-      var target = document.createAttribute("data-target");
-      target.value = "#memberGroup";
-      span_modal.setAttributeNode(toggle);
-      span_modal.setAttributeNode(target);
-      span_modal.appendChild(document.createTextNode(window.groupStore.data[i].group_name));
+groupStore.notifier.on('change', function(){
+  renderSidebar();
 
-      a.appendChild(span_modal);
-
-      var span = document.createElement('span');
-      var span_class = document.createAttribute("class");
-      span_class.value ="glyphicon glyphicon-ok pull-right";
-      span.setAttributeNode(span_class);
-      a.appendChild(span);
-
-      sidebar.appendChild(li);
-    }
-  }
-
-  groupStore.notifier.on('change', function(){
-    renderSidebar();
-  });
 
   // Select group and switch beetween them
     $('.glyphicon-ok').on("click", function(){
+      console.log("her");
       if ($(this).hasClass('green')){
         $(this).addClass("green");
       }
@@ -54,10 +53,10 @@ $(document).ready(function () {
 
 $('ul.sidebar-nav li').on('click', function(){
   var domElem = $(this).get(0);
-
-  for (let i in window.groupStore.data ){
-      if (domElem.getAttribute('data-id') ===  window.groupStore.data[i].group_id){
-        for (let j in  window.groupStore.data[i].users){
+  console.log('onclick fired');
+  for (let i = 0; i < window.groupStore.data.length; ++i) {
+      if (domElem.getAttribute('data-id') ==  window.groupStore.data[i].group_id){
+        console.log('neeeded group');
 
         var sidebar = document.querySelector("ul.list-group");
 
@@ -81,11 +80,14 @@ $('ul.sidebar-nav li').on('click', function(){
             li.appendChild(span);
             sidebar.appendChild(li);
           }
-        }
       }
     }
+
+    for (let i=0; i<usersStore.data.length; ++i){x
+      var new_option = document.createElement('option');
+      new_option.value = usersStore.data[i].id;
+      new_option.setAttribute('data-input-id',usersStore.data[i].id);
+    }
 });
-
-
 
 });
