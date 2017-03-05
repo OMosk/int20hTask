@@ -26,8 +26,13 @@
 
         var span = document.createElement('span');
         var span_class = document.createAttribute("class");
+        var span_id = document.createAttribute("data-id-span");
+        span_id.value = window.groupStore.data[i].group_id;
+
+
         span_class.value ="glyphicon glyphicon-ok pull-right";
         span.setAttributeNode(span_class);
+        span.setAttributeNode(span_id);
         a.appendChild(span);
 
         sidebar.appendChild(li);
@@ -44,10 +49,11 @@ groupStore.notifier.on('change', function(){
       console.log("her");
       if ($(this).hasClass('green')){
         $(this).addClass("green");
+
         var domElem = $(this).get(0);
         var id = domElem.getAttribute('data-id');
         for (var i=0; i<groupStore.data.length; i++){
-          if (id === groupStore.data[i].group_id){
+          if (id == groupStore.data[i].group_id){
             client.changeCurrentGroup(groupStore.data[i]);
           }
         }
@@ -58,7 +64,7 @@ groupStore.notifier.on('change', function(){
         var domElem = $(this).get(0);
         var id = domElem.getAttribute('data-id');
         for (var i=0; i<groupStore.data.length; i++){
-          if (id === groupStore.data[i].group_id){
+          if (id == groupStore.data[i].group_id){
             client.changeCurrentGroup(groupStore.data[i]);
           }
         }
