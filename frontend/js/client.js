@@ -151,7 +151,7 @@
               console.log(data);
               cb(false);
             }
-            console.log(data); 
+            console.log(data);
           });
           //window.usersStore.set(data);
         }
@@ -173,7 +173,7 @@
       });
     }
   }
-  
+
   Client.prototype.createGroup = function(name, cb) {
     if (typeof cb === 'undefined') cb = function() {};
     this.makeAction({
@@ -225,7 +225,7 @@
   Client.prototype.removeFromGroup = function(group, user, cb) {
 
   }
-  
+
   Client.prototype.getAllUsers = function(cb) {
     if (typeof cb === 'undefined') cb = function() {};
     this.makeAction({
