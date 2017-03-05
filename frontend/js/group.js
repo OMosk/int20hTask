@@ -54,11 +54,9 @@ groupStore.notifier.on('change', function(){
 $('ul.sidebar-nav li').on('click', function(){
   var domElem = $(this).get(0);
   console.log('onclick fired');
-  //for (let i in window.groupStore.data ){
   for (let i = 0; i < window.groupStore.data.length; ++i) {
       if (domElem.getAttribute('data-id') ==  window.groupStore.data[i].group_id){
         console.log('neeeded group');
-        //for (let j in  window.groupStore.data[i].users){
 
         var sidebar = document.querySelector("ul.list-group");
 
@@ -82,8 +80,13 @@ $('ul.sidebar-nav li').on('click', function(){
             li.appendChild(span);
             sidebar.appendChild(li);
           }
-        //}
       }
+    }
+
+    for (let i=0; i<usersStore.data.length; ++i){
+      var new_option = document.createElement('option');
+      new_option.value = usersStore.data[i].id;
+      new_option.setAttribute('data-input-id',usersStore.data[i].id);
     }
 });
 
