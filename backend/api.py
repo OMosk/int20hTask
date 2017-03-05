@@ -90,7 +90,7 @@ def get_all_users(db):
 
 def get_all_groups(action, db, group_id = None):
     try:
-        sql = """SELECT gr.name, gu.group_id
+        sql = """SELECT gr.name, gu.group_id, gr.geo_location
             from groups gr LEFT OUTER JOIN group_users gu
             ON gr.id = gu.group_id
             WHERE gu.user_id = %(user_id)s
