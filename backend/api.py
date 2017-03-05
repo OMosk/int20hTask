@@ -116,6 +116,7 @@ def get_all_groups(action, db):
                     "photo": i["photo"],
                     "geo_location": i["geo_location"]
                 }
+                user["message"] = get_bubble(group['group_id'], user['id'], db)
                 users.append(user)
             group["users"] = users
             groups.append(group)
@@ -145,3 +146,17 @@ def user_in_group(user_id, group_id, db):
     db.execute(sql, values)
     users = db.fetchall()
     return True if users else False
+
+
+def get_bubble(group_id, user_id, db):
+    sql = """SELECT text from bubbles
+        WHERE authour = %(user_id)s
+        AND group_id = %(group_id)s
+        ORDER  BY date DESC
+    """
+    values = {"user_id": user_id, "group_id": group_id}
+    db.execute(sql, values)
+    bubbles = db.fetchall()
+    if bubbles:
+        bubbles = bubbles[0]
+    return bubbles

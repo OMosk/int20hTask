@@ -59,6 +59,9 @@ class WebSocket(tornado.websocket.WebSocketHandler):
             elif action['type'] == 'sent_message':
                 response = router.sent_message(self, action, db)
                 continue
+            elif action['type'] == 'invite_into_group':
+                response = router.invite_into_group(self, action, db)
+                continue
             else:
                 response['error'] = "sorry, no such action"
             response_action.update(response)

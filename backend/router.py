@@ -79,3 +79,14 @@ def sent_message(socket, action, db):
         if api.user_in_group(sock.id, action['group_id'], db):
             sock.write_message(action)
 
+
+def invite_into_group(socket, action, db):
+    params = {"group_id": action['group_id'],
+              "user_id": action["guest_id"]}
+    api.add_user_to_group(params, db)
+    for sock in socket.application.webSocketsPool:
+        if sock.id == action['guest_id']:
+            sock.write_message(action)
+        elif api.user_in_group(sock.id, action['group_id'], db):
+            sock.write_message(action)
+
