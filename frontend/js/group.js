@@ -50,6 +50,10 @@
       }
     }
 
+    $('hamburger').on('click',function(){
+      renderSidebar();
+    });
+
 
 groupStore.notifier.on('change', function(){
   renderSidebar();

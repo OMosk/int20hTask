@@ -1,5 +1,6 @@
   var map;
   var users = [];
+  var marker;
 
 
   function renderMarkers (){
