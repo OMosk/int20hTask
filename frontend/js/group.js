@@ -51,7 +51,7 @@ groupStore.notifier.on('change', function(){
         $(this).addClass("green");
 
         var domElem = $(this).get(0);
-        var id = domElem.getAttribute('data-id');
+        var id = domElem.getAttribute('data-id-span');
         for (var i=0; i<groupStore.data.length; i++){
           if (id == groupStore.data[i].group_id){
             client.changeCurrentGroup(groupStore.data[i]);
@@ -62,7 +62,7 @@ groupStore.notifier.on('change', function(){
         $('.glyphicon-ok').removeClass('green');
         $(this).addClass("green");
         var domElem = $(this).get(0);
-        var id = domElem.getAttribute('data-id');
+        var id = domElem.getAttribute('data-id-span');
         for (var i=0; i<groupStore.data.length; i++){
           if (id == groupStore.data[i].group_id){
             client.changeCurrentGroup(groupStore.data[i]);

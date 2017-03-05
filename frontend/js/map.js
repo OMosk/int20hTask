@@ -1,7 +1,7 @@
   var map;
+  var users = [];
 
   function renderMarkers (){
-        var users = [];
 
         for (var i in window.stateStore.data.activeGroup.users ){
 
@@ -100,15 +100,15 @@
 
 
   stateStore.notifier.on('new_message', function(message){
-      if (message.group_id === stateStore.data.activeGroup){
+      if (message.group_id === stateStore.data.activeGroup.group_id){
           for (var i=0; i<users.length; ++i){
-            if (messsage.user_id === users[i].user.id){
-              users[i].infowindow.setContentHTML('<div id="bubble">'+
+            if (message.user_id === users[i].user.id){
+              users[i].infowindow.setContent('<div id="bubble">'+
                   '<div id="bodyContent">'+
                   message.text+
                   '</div>'+
                   '</div>');
-              users[i].infowindow.open();
+              users[i].infowindow.open(map, users[i].marker);
             }
           }
       }
