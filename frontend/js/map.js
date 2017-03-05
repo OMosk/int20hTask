@@ -51,7 +51,7 @@
 
           let icon = {
             url:window.stateStore.data.activeGroup.users[i].photo,
-            scaledSize: new google.maps.Size(50, 50),
+            scaledSize: new google.maps.Size(80, 80),
             shape:{coords:[17,17,18],type:'circle'},
             optimized:false // scaled size
           }

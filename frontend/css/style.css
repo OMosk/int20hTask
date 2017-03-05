@@ -42,6 +42,11 @@ html, body {
     margin: 0px;
   }
 
+  form input{
+      width: 80% !important;
+      float: left;
+  }
+
   .message{
     margin-right: 0px;
   }
