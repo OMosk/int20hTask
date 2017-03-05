@@ -5,19 +5,19 @@
 
         for (var i in window.stateStore.data.activeGroup.users ){
 
-          var array = window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
-          var contentString = '<div id="bubble">'+
+          let array = window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
+          let contentString = '<div id="bubble">'+
               '<div id="bodyContent">'+
               window.stateStore.data.activeGroup.users[i].message+
               '</div>'+
               '</div>';
 
-          var infowindow = new google.maps.InfoWindow({
+          let infowindow = new google.maps.InfoWindow({
             content: contentString
           });
 
 
-          var icon = {
+          let icon = {
             url:window.stateStore.data.activeGroup.users[i].photo,
             scaledSize: new google.maps.Size(50, 50),
             shape:{coords:[17,17,18],type:'circle'},
@@ -29,7 +29,7 @@
             lng:parseFloat(array[1])
           }
 
-          var marker = new google.maps.Marker({
+          let marker = new google.maps.Marker({
             position: uluru,
             icon: icon,
             map: map,
