@@ -16,6 +16,7 @@
             content: contentString
           });
 
+
           var icon = {
             url:window.stateStore.data.activeGroup.users[i].photo,
             scaledSize: new google.maps.Size(50, 50),
@@ -35,6 +36,12 @@
             title: window.stateStore.data.activeGroup.users[i].name
           });
 
+          infowindow.open(map, marker);
+
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+
           users.push({
             marker:marker,
             user: window.stateStore.data.activeGroup.users[i],
@@ -42,11 +49,6 @@
           });
 
         }
-
-
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
 
         map.addListener('click', function() {
           infowindow.close(map, marker);
