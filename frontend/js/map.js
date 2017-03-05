@@ -1,9 +1,18 @@
   var map;
   var users = [];
 
+
   function renderMarkers (){
 
+  for (let i=0; i<users.length; i++){
+    if (users[i].infowindow){
+        infowindow.close();
+    }
+  }
+
+
         for (var i in window.stateStore.data.activeGroup.users ){
+
 
           let array = window.stateStore.data.activeGroup.users[i].geo_location.split(' ');
           let contentString = '<div id="bubble">'+
