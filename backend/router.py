@@ -112,7 +112,8 @@ def set_goal(socket, action, db):
     api.set_goal(action, db)
     for sock in socket.application.webSocketsPool:
             if api.user_in_group(sock.id, action['group_id'], db):
-                sock.write_message(action)
+                actions = {"actions": [action, ]}
+                sock.write_message(actions)
 
 
 def update_location(action, db):

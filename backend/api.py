@@ -90,7 +90,7 @@ def get_all_users(db):
 
 def get_all_groups(action, db, group_id = None):
     try:
-        sql = """SELECT gr.name, gu.group_id
+        sql = """SELECT gr.name, gu.group_id, gr.geo_location
             from groups gr LEFT OUTER JOIN group_users gu
             ON gr.id = gu.group_id
             WHERE gu.user_id = %(user_id)s
@@ -103,7 +103,7 @@ def get_all_groups(action, db, group_id = None):
         groups = []
         for raw_group in raw_groups:
             group = {"name": raw_group['name'],
-                     "group_id": raw_group["group_id",
+                     "group_id": raw_group["group_id"],
                      "geo_location": raw_group["geo_location"]}
             sql = """SELECT users.* from
                 users LEFT OUTER JOIN group_users gu
@@ -162,7 +162,7 @@ def get_bubble(group_id, user_id, db):
     db.execute(sql, values)
     bubbles = db.fetchall()
     if bubbles:
-        bubbles = bubbles[0]
+        bubbles = bubbles[0][0]
     return bubbles
 
 
@@ -185,17 +185,22 @@ def get_user(user_id, db):
     user = db.fetchall()
     if user:
         return {"name": user[0]['name'],
-                "photo": user[0]['photo',
+                "photo": user[0]['photo'],
                 "geo_location": user[0]['geo_location']}
     else:
         return {}
 
-def set_goal(action, db):
-    sql = """UPDATE groups SET geo_location = %(geo_location)s
-        WHERE id = %(group_id)s
-    """
-    db.execute(sql, action)
 
+def set_goal(action, db):
+    try:
+        sql = """UPDATE groups SET geo_location = %(geo_location)s
+            WHERE id = %(group_id)s
+        """
+        db.execute(sql, action)
+        return None, True
+    except Exception as e:
+        print e
+        return e, False
 
 
 def delete_user_from_group(action, db):
