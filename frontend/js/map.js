@@ -2,6 +2,11 @@
   var users = [];
   var marker;
 
+  var meet_location = new google.maps.Marker({
+    map: map,
+    title: 'Attention point'
+  });
+
 
   function renderMarkers (){
 
@@ -72,10 +77,6 @@
         //  infowindow.close(map, marker);
         //});
 
-        var meet_location = new google.maps.Marker({
-          map: map,
-          title: 'Uluru (Ayers Rock)'
-        });
 
         function placeMarker(location) {
           if ( meet_location ) {
