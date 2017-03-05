@@ -76,10 +76,10 @@
       clearInterval(this.interval);
       this.interval = null;
     }
-    //if (this.shouldReconnect) {
-    //  console.log("reconnecting");
-    //  this.connect();
-    //}
+    if (this.shouldReconnect) {
+      console.log("reconnecting");
+      this.connect();
+    }
   }
 
 
@@ -194,6 +194,9 @@
   }
 
   Client.prototype.onAuth = function(res) {
+    if (!res.error) {
+      document.querySelector('button.btn-facebook').style.display = 'none';
+    }
     var client = this;
     this.getGroups(function(res){
       if (res) {

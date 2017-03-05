@@ -2,13 +2,19 @@
   var users = [];
   var marker;
 
-  var meet_location = new google.maps.Marker({
+  var meet_location/* = new google.maps.Marker({
     map: map,
     title: 'Attention point'
-  });
+  });*/
 
 
   function renderMarkers (){
+    if (typeof meet_location == 'undefined') {
+      meet_location = new google.maps.Marker({
+        map: map,
+        title: 'Attention point'
+      });
+    }
 
     for (let i=0; i<users.length; i++){
       if (users[i].infowindow){
