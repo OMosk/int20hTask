@@ -22,6 +22,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
 
     def open(self):
         self.application.webSocketsPool.append(self)
+        self.__id = ""
 
     def on_message(self, message):
         conn = self.application.conn

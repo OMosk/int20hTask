@@ -76,9 +76,10 @@ def get_all_groups(action, db):
 def sent_message(socket, action, db):
     api.add_message_to_db(action, db)
     for sock in socket.application.webSocketsPool:
-        if sock.__id:
-            if api.user_in_group(sock.__id, action['group_id'], db):
-                sock.write_message(action)
+        if hasattr(sock, '__id'):
+            if sock.__id:
+                if api.user_in_group(sock.__id, action['group_id'], db):
+                    sock.write_message(action)
 
 
 def invite_into_group(socket, action, db):
