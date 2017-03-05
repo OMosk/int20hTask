@@ -98,14 +98,15 @@
     }
 
     if (action.type == 'sent_message') {
-      var groups = groupStore.data;
-      for (var i = 0; i < groups.length; ++i) {
-        var group = groups[i];
+      let groups = groupStore.data;
+      for (let i = 0; i < groups.length; ++i) {
+        let group = groups[i];
         if (group.group_id == action.group_id) {
-          for (var j = 0; group.users.length; ++j) {
-            var user = group.users[j];
+          for (let j = 0; j < group.users.length; ++j) {
+            let user = group.users[j];
             if (user.id == action.user_id) {
               user.message = action.text;
+              stateStore.notifier.emit('new_message', action);
               //TODO show message
             }
           }
