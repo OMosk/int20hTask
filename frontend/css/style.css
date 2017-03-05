@@ -32,5 +32,21 @@ html, body {
   margin-bottom:15px;
 }
 
-#message{
+.messageButton{
+  width:65px;
+}
+
+
+@media (max-width: 500px) {
+
+}
+
+@media (min-width: 800px) {
+  #message{
+    width:600px;
+  }
+}
+
+#bubble{
+  text-align: center;
 }

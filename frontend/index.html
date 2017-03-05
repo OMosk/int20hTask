@@ -10,18 +10,18 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      integrity="<sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32Om></sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32Om>Ucww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous">
   </head>
   <body>
 
   <div id="map"></div>
-    <div class="content">
+    <div class="content container">
       <form class="form-inline pull-right message">
         <div class="form-group">
-          <textarea type="message"  class="form-control" id="message"> </textarea>
+          <textarea type="message" class="form-control" id="message"> </textarea>
         </div>
-        <button type="submit" class="btn btn-default">Send</button>
+          <button type="submit" class="btn btn-default messageButton"><img class="arrowImage" width="100%" src="img/sender.png" alt=""></button>
       </form>
     </div>
 
@@ -179,7 +179,7 @@
          var js, fjs = d.getElementsByTagName(s)[0];
          if (d.getElementById(id)) {return;}
          js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
     </script>
