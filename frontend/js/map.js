@@ -6,7 +6,6 @@
         center: uluru
       });
 
-
     var contentString = '<div id="bubble">'+
         '<div id="bodyContent">'+
         'body textalsjhfasjlhfasjlhflsajfhaslhflasjhfljashf'
@@ -17,29 +16,37 @@
       content: contentString
     });
 
-    var image = 'img/oval-face.png';
-    var icon = {
-      url:image,
-      scaledSize: new google.maps.Size(50, 50),
-      shape:{coords:[17,17,18],type:'circle'},
-      optimized:false // scaled size
+    for (var i in window.usersStore.data ){
+      var array = window.usersStore.data[i].geo_location.split(' ');
+
+      var icon = {
+        url:window.usersStore.data[i].photo,
+        scaledSize: new google.maps.Size(50, 50),
+        shape:{coords:[17,17,18],type:'circle'},
+        optimized:false // scaled size
+      }
+
+      uluru = {
+        lat:parseFloat(array[0]),
+        lng:parseFloat(array[1])
+      }
+
+      var marker = new google.maps.Marker({
+        position: uluru,
+        icon: icon,
+        map: map,
+        title: window.usersStore.data[i].name
+      });
     }
 
-    var marker = new google.maps.Marker({
-      position: uluru,
-      icon: icon,
-      map: map,
-      title: 'Uluru (Ayers Rock)'
-    });
-
-    var marker2 = new google.maps.Marker({
+    var meet_location = new google.maps.Marker({
       map: map,
       title: 'Uluru (Ayers Rock)'
     });
 
     setTimeout(function() {
       infowindow.open(map, marker);
- }, 3000)
+    }, 3000);
 
     marker.addListener('click', function() {
       infowindow.open(map, marker);
@@ -50,10 +57,10 @@
     });
 
     function placeMarker(location) {
-      if ( marker2 ) {
-        marker2.setPosition(location);
+      if ( meet_location ) {
+        meet_location.setPosition(location);
       } else {
-        marker2 = new google.maps.Marker({
+        meet_location = new google.maps.Marker({
           position: location,
           map: map
         });
