@@ -103,7 +103,7 @@ def get_all_groups(action, db, group_id = None):
         groups = []
         for raw_group in raw_groups:
             group = {"name": raw_group['name'],
-                     "group_id": raw_group["group_id",
+                     "group_id": raw_group["group_id"],
                      "geo_location": raw_group["geo_location"]}
             sql = """SELECT users.* from
                 users LEFT OUTER JOIN group_users gu
@@ -185,10 +185,11 @@ def get_user(user_id, db):
     user = db.fetchall()
     if user:
         return {"name": user[0]['name'],
-                "photo": user[0]['photo',
+                "photo": user[0]['photo'],
                 "geo_location": user[0]['geo_location']}
     else:
         return {}
+
 
 def set_goal(action, db):
     try:
@@ -200,7 +201,6 @@ def set_goal(action, db):
     except Exception as e:
         print e
         return e, False
-
 
 
 def delete_user_from_group(action, db):
