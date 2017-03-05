@@ -100,7 +100,8 @@ def get_all_groups(action, db):
         groups = []
         for raw_group in raw_groups:
             group = {"name": raw_group['name'],
-                     "group_id": raw_group["group_id"]}
+                     "group_id": raw_group["group_id",
+                     "geo_location": raw_group["geo_location"]}
             sql = """SELECT users.* from
                 users LEFT OUTER JOIN group_users gu
                 ON users.provider_id = gu.user_id
